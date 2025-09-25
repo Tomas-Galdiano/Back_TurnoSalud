@@ -1,44 +1,38 @@
-import supabase from "../config/supabase.js";
-
-export const loginWithPassword = async (req, res) => {
-  const { email, password } = req.body;
-
-  // Validar
-  if (!email || !email.includes("@")) {
-    return res.status(400).json({ message: "Correo electrónico inválido." });
-  }
-
-  try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+export const login = (req, res) => {
+  const { EMAIL, PASSWORD } = req.body;
+  if (EMAIL === "test@test.com" && PASSWORD === "123456") {
+    return res.status(200).json({
+      success: true,
+      token: "simulated_token_123",
+      message: "Login exitoso"
     });
-
-    if (error) {
-      return res.status(401).json({ error: error.message });
-    }
-
-    res.json({
-      message: "Login exitoso",
-      session: data.session,
-      user: data.user,
-    });
-  } catch (err) {
-    res.status(500).json({ error: "Error interno del servidor" });
   }
+  return res.status(401).json({ success: false, message: "Credenciales inválidas" });
 };
 
-export const sendMagicLink = async (req, res) => {
-  const { email } = req.body;
+export const magicLink = (req, res) => {
+  const { EMAIL } = req.body;
+  if (EMAIL) {
+    return res.status(200).json({
+      success: true,
+      message: "Enlace mágico enviado (simulado)"
+    });
+  }
+  return res.status(400).json({ success: false, message: "Email requerido" });
+};
 
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      emailRedirectTo: "ACA IRIA LA URL DEL DASHBOARD",
-    },
+export const resetPassword = (req, res) => {
+  const { token, newPassword } = req.body;
+  console.log("Recibiendo solicitud de reset:", { token, newPassword }); // Depuración
+  // Simulación: verifica que el token exista y la contraseña sea válida
+  if (token && newPassword && newPassword.length >= 6) {
+    return res.status(200).json({
+      success: true,
+      message: "Contraseña restablecida con éxito (simulado)",
+    });
+  }
+  return res.status(400).json({
+    success: false,
+    message: "Token inválido o contraseña inválida",
   });
-
-  if (error) return res.status(400).json({ error: error.message });
-
-  res.json({ message: "Magic link enviado al correo" });
 };
