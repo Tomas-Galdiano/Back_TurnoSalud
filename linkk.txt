@@ -1,0 +1,3 @@
+ACA TENES QUE ENVIAR EL CORREO ASI RECIBE EL ENLACE MAGICO: http://localhost:4000/auth/magic-link
+
+Aca envias El usuario para comparar en la bd y obtener el rol,token,etc: http://localhost:4000/auth/login
